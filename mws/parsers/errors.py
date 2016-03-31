@@ -10,7 +10,7 @@ class ErrorResponse(ValueError, BaseElementWrapper, BaseResponseMixin):
     @property
     @first_element
     def type(self):
-        return self.element.xpath('//ErrorResponse/Error/Type/text()')
+        return self.element.xpath('//Error/Type/text()')
 
     @property
     @first_element
