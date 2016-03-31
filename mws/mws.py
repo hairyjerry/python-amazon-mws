@@ -19,6 +19,7 @@ from time import strftime, gmtime
 
 from requests import request
 from requests.exceptions import HTTPError
+from parsers.errors import ErrorResponse
 
 
 __all__ = [
@@ -192,6 +193,11 @@ class MWS(object):
             # if i pass the params dict as params to request, request will repeat that step because it will need
             # to convert the dict to a url parsed string, so why do it twice if i can just pass the full url :).
             response = request(method, url, data=kwargs.get('body', ''), headers=headers)
+            err = ErrorResponse.load(response.content)
+            print err.message
+            if err.message:
+                raise err
+
             response.raise_for_status()
             # When retrieving data from the response object,
             # be aware that response.content returns the content in bytes while response.text calls
@@ -204,6 +210,8 @@ class MWS(object):
                 parsed_response = DictWrapper(data, extra_data.get("Action") + "Result")
             except XMLError:
                 parsed_response = DataWrapper(data, response.headers)
+        except ErrorResponse:
+            raise
 
         except HTTPError, e:
             error = MWSError(str(e.response.text))
@@ -466,7 +474,7 @@ class Products(MWS):
         data.update(self.enumerate_param('ASINList.ASIN.', asins))
         return self.make_request(data)
 
-    def get_matching_product_for_id(self, marketplaceid, type, ids):
+    def get_matching_product_for_id(self, marketplaceid, type, ids, mws_auth_token=None):
         """ Returns a list of products and their attributes, based on a list of
             product identifier values (ASIN, SellerSKU, UPC, EAN, ISBN, GCID  and JAN)
             The identifier type is case sensitive.
@@ -476,6 +484,8 @@ class Products(MWS):
                     MarketplaceId=marketplaceid,
                     IdType=type)
         data.update(self.enumerate_param('IdList.Id.', ids))
+        if mws_auth_token:
+            data.update({'MWSAuthToken': mws_auth_token})
         return self.make_request(data)
 
     def get_competitive_pricing_for_sku(self, marketplaceid, skus):
