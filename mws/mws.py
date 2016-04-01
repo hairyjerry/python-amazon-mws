@@ -472,7 +472,7 @@ class Products(MWS):
         data.update(self.enumerate_param('ASINList.ASIN.', asins))
         return self.make_request(data)
 
-    def get_matching_product_for_id(self, marketplaceid, type, ids, mws_auth_token=None):
+    def get_matching_product_for_id(self, marketplaceid, type, ids):
         """ Returns a list of products and their attributes, based on a list of
             product identifier values (ASIN, SellerSKU, UPC, EAN, ISBN, GCID  and JAN)
             The identifier type is case sensitive.
@@ -482,8 +482,6 @@ class Products(MWS):
                     MarketplaceId=marketplaceid,
                     IdType=type)
         data.update(self.enumerate_param('IdList.Id.', ids))
-        if mws_auth_token:
-            data.update({'MWSAuthToken': mws_auth_token})
         return self.make_request(data)
 
     def get_competitive_pricing_for_sku(self, marketplaceid, skus):
