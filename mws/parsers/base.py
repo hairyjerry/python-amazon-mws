@@ -4,6 +4,11 @@ import mws
 
 
 def first_element_or_none(element_list):
+    """
+    Return the first element or None from an lxml selector result.
+    :param element_list: lxml selector result
+    :return:
+    """
     if element_list:
         return element_list[0]
     return
