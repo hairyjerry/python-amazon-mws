@@ -192,7 +192,7 @@ class MWS(object):
             # My answer is, here i have to get the url parsed string of params in order to sign it, so
             # if i pass the params dict as params to request, request will repeat that step because it will need
             # to convert the dict to a url parsed string, so why do it twice if i can just pass the full url :).
-            response = request(method, url, data=kwargs.get('body', ''), headers=headers)
+            response = request(method, url, data=kwargs.get('body', ''), headers=headers, timeout=15)
 
             err = ErrorResponse.load(response.content)
             if err.message:
