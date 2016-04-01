@@ -6,37 +6,12 @@ except ImportError:
 
 
 from base import BaseElementWrapper, first_element, first_element_or_none, BaseResponseMixin
+from errors import ProductError
 
 product_namespaces = {
     'a': 'http://mws.amazonservices.com/schema/Products/2011-10-01',
     'b': 'http://mws.amazonservices.com/schema/Products/2011-10-01/default.xsd'
 }
-
-
-class ProductError(ValueError, BaseElementWrapper):
-    """
-    Error wrapper for any error returned back for any call to the Products api.
-    """
-
-    def __init__(self, element, identifier):
-        self.element = element
-        self.identifier = identifier
-        super(ValueError, self).__init__(self.message)
-
-    @property
-    @first_element
-    def message(self):
-        return self.element.xpath('./a:Message/text()', namespaces=product_namespaces)
-
-    @property
-    @first_element
-    def code(self):
-        return self.element.xpath('./a:Code/text()', namespaces=product_namespaces)
-
-    @property
-    @first_element
-    def type(self):
-        return self.element.xpath('./a:Type/text()', namespaces=product_namespaces)
 
 
 #######################################
