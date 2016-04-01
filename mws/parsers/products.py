@@ -1,4 +1,3 @@
-from lxml import etree
 try:
     import mws
     mws_import = True
@@ -16,7 +15,7 @@ product_namespaces = {
 
 class ProductError(ValueError, BaseElementWrapper):
     """
-    Error wrapper for any error returned back for a GetMatchingProductForIdResult.
+    Error wrapper for any error returned back for any call to the Products api.
     """
 
     def __init__(self, element, identifier):
