@@ -193,8 +193,8 @@ class MWS(object):
             # if i pass the params dict as params to request, request will repeat that step because it will need
             # to convert the dict to a url parsed string, so why do it twice if i can just pass the full url :).
             response = request(method, url, data=kwargs.get('body', ''), headers=headers)
+
             err = ErrorResponse.load(response.content)
-            print err.message
             if err.message:
                 raise err
 
@@ -210,8 +210,6 @@ class MWS(object):
                 parsed_response = DictWrapper(data, extra_data.get("Action") + "Result")
             except XMLError:
                 parsed_response = DataWrapper(data, response.headers)
-        except ErrorResponse:
-            raise
 
         except HTTPError, e:
             error = MWSError(str(e.response.text))
