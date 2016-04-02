@@ -32,6 +32,9 @@ class BaseElementWrapper(object):
     def __init__(self, element):
         self.element = element
 
+    def __str__(self):
+        return etree.tostring(self.element)
+
 
 class BaseResponseMixin(object):
 
