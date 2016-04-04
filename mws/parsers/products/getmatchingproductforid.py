@@ -146,7 +146,7 @@ class GetMatchingProductForIdResponse(BaseElementWrapper, BaseResponseMixin):
 
     @classmethod
     def request(cls, mws_access_key, mws_secret_key, mws_account_id,
-                mws_marketplace_id, id_type=None, ids=()):
+                mws_marketplace_id, id_type=None, ids=(), mws_auth_token=None):
         """
         Use python amazon mws to request get_matching_product_for_id.
 
@@ -158,6 +158,6 @@ class GetMatchingProductForIdResponse(BaseElementWrapper, BaseResponseMixin):
         :param ids: List of identifiers.
         :return:
         """
-        products_api = mws.Products(mws_access_key, mws_secret_key, mws_account_id)
+        products_api = mws.Products(mws_access_key, mws_secret_key, mws_account_id, auth_token=mws_auth_token)
         response = products_api.get_matching_product_for_id(mws_marketplace_id, id_type, ids)
         return cls.load(response.original)
