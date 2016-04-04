@@ -55,6 +55,16 @@ class GetMatchingProductForIdProduct(BaseElementWrapper):
     def part_number(self):
         return self.element.xpath('./a:AttributeSets/b:ItemAttributes/b:PartNumber/text()', namespaces=namespaces)
 
+    @property
+    @first_element
+    def model(self):
+        return self.element.xpath('./a:AttributeSets/b:ItemAttributes/b:Model/text()', namespaces=namespaces)
+
+    @property
+    @first_element
+    def color(self):
+        return self.element.xpath('./a:AttributeSets/b:ItemAttributes/b:Color/text()', namespaces=namespaces)
+
     # ToDo: Add attribute sets and included children
 
     # ToDo: Add relationships and included children
