@@ -50,6 +50,11 @@ class GetMatchingProductForIdProduct(BaseElementWrapper):
     def weight(self):
         return self.element.xpath('./a:AttributeSets/b:ItemAttributes/b:PackageDimensions/b:Weight/text()', namespaces=namespaces)
 
+    @property
+    @first_element
+    def part_number(self):
+        return self.element.xpath('./a:AttributeSets/b:ItemAttributes/b:PartNumber/text()', namespaces=namespaces)
+
     # ToDo: Add attribute sets and included children
 
     # ToDo: Add relationships and included children

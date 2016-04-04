@@ -1,7 +1,5 @@
 from lxml import etree
 
-import mws
-
 
 def first_element_or_none(element_list):
     """
