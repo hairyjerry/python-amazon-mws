@@ -31,6 +31,7 @@ __all__ = [
     'Products',
     'Recommendations',
     'Sellers',
+    'Finances',
 ]
 
 # See https://images-na.ssl-images-amazon.com/images/G/01/mwsportal/doc/en_US/bde/MWSDeveloperGuide._V357736853_.pdf page 8
@@ -120,7 +121,7 @@ class MWS(object):
     """ Base Amazon API class """
 
     # This is used to post/get to the different uris used by amazon per api
-    # ie. /Orders/2011-01-01
+    # ie. /Orders/2013-09-01
     # All subclasses must define their own URI only if needed
     URI = "/"
 
@@ -404,9 +405,9 @@ class Reports(MWS):
 class Orders(MWS):
     """ Amazon Orders API """
 
-    URI = "/Orders/2011-01-01"
-    VERSION = "2011-01-01"
-    NS = '{https://mws.amazonservices.com/Orders/2011-01-01}'
+    URI = "/Orders/2013-09-01"
+    VERSION = "2013-09-01"
+    NS = '{https://mws.amazonservices.com/Orders/2013-09-01}'
 
     def list_orders(self, marketplaceids, created_after=None, created_before=None, lastupdatedafter=None,
                     lastupdatedbefore=None, orderstatus=(), fulfillment_channels=(),
@@ -659,3 +660,57 @@ class Recommendations(MWS):
         data = dict(Action="ListRecommendationsByNextToken",
                     NextToken=token)
         return self.make_request(data, "POST")
+
+class Finances(MWS):
+    """ Amazon MWS Finances API """
+
+    URI = '/Finances/2015-05-01'
+    VERSION = '2015-05-01'
+    NS = '{https://mws.amazonservices.com/Finances/2015-05-01}'
+
+    def list_financial_event_groups(self, max_results=None, startedafter=None, startedbefore=None):
+        """
+            Returns a list of financial event groups opened during a time frame specified by the 
+            FinancialEventGroupStartedAfter or the FinancialEventGroupStartedBefore request parameters.
+        """
+
+        data = dict(Action='ListFinancialEventGroups',
+                    MaxResultsPerPage=max_results,
+                    FinancialEventGroupStartedAfter=startedafter,
+                    FinancialEventGroupStartedBefore=startedbefore)
+        return self.make_request(data)
+
+    def list_financial_event_groups_by_next_token(self, token):
+        """
+            Takes a "NextToken" and returns the same information as "list_financial_event_groups".
+            Based on the "NextToken".
+        """
+        data = dict(Action='ListFinancialEventGroupsByNextToken', NextToken=token)
+        return self.make_request(data)
+
+    def list_financial_events(self, max_results=None, amazon_order_id=None, financial_event_id=None, postedafter=None, postedbefore=None):
+        """
+            Returns a list of financial events that matches the filter specified in the request.
+            You can filter by financial event group ID, date range, or order ID. If you specify a 
+            financial event group ID in the request, then all financial events in that financial event 
+            group are returned. If you specify a time range in the request, then all financial events 
+            that are posted between the time ranges are returned. If you specify an order ID in the 
+            request, then all financial events that are part of the order are returned.
+        """
+
+        data = dict(Action='ListFinancialEvents',
+                    MaxResultsPerPage=max_results,
+                    AmazonOrderId=amazon_order_id,
+                    FinancialEventGroupId=financial_event_id,
+                    PostedAfter=postedafter,
+                    PostedBefore=postedbefore)
+        return self.make_request(data)
+
+    def list_financial_events_by_next_token(self, token):
+        """
+            Takes a "NextToken" and returns the same information as "list_financial_events".
+            Based on the "NextToken".
+        """
+        data = dict(Action='ListFinancialEventsByNextToken', NextToken=token)
+        return self.make_request(data)
+
