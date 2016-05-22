@@ -195,9 +195,14 @@ class MWS(object):
             # to convert the dict to a url parsed string, so why do it twice if i can just pass the full url :).
             response = request(method, url, data=kwargs.get('body', ''), headers=headers, timeout=15)
 
-            err = ErrorResponse.load(response.content)
-            if err.message:
-                raise err
+            err = None
+            try:
+                err = ErrorResponse.load(response.content)
+                if err.message:
+                    raise err
+            except:
+                # This fails for flat responses, ignore it
+                pass
 
             response.raise_for_status()
             # When retrieving data from the response object,
@@ -702,7 +707,7 @@ class Finances(MWS):
                     MaxResultsPerPage=max_results,
                     AmazonOrderId=amazon_order_id,
                     FinancialEventGroupId=financial_event_id,
-                    PostedAfter=postedafter,
+                    PostedAfter=parse_datetime(postedafter),
                     PostedBefore=postedbefore)
         return self.make_request(data)
 
