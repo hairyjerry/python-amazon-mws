@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 from setuptools import setup, find_packages
 
-version = '0.6.1'
+version = '0.6.2'
 
-REQUIREMENTS = ['requests', 'lxml']
+REQUIREMENTS = ['requests', 'lxml', 'python-dateutil']
 
 CLASSIFIERS = [
     'Development Status :: 2 - Pre-Alpha',

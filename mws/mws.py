@@ -9,6 +9,7 @@ import urllib
 import hashlib
 import hmac
 import base64
+
 import utils
 import re
 try:
@@ -20,7 +21,7 @@ from time import strftime, gmtime
 from requests import request
 from requests.exceptions import HTTPError
 from parsers.errors import ErrorResponse
-
+import dateutil.parser
 
 __all__ = [
     'Feeds',
@@ -707,7 +708,7 @@ class Finances(MWS):
                     MaxResultsPerPage=max_results,
                     AmazonOrderId=amazon_order_id,
                     FinancialEventGroupId=financial_event_id,
-                    PostedAfter=parse_datetime(postedafter),
+                    PostedAfter=dateutil.parser.parse(postedafter),
                     PostedBefore=postedbefore)
         return self.make_request(data)
 
